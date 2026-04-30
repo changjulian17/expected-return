@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expected Returns — Methodology</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:20px;line-height:1.7}
+  .c{max-width:900px;margin:0 auto}
+  h1{color:#f0f6fc;font-size:1.8em;margin-bottom:4px}
+  .sub{color:#8b949e;font-size:.85em;margin-bottom:24px}
+  h2{color:#f0f6fc;font-size:1.2em;margin:32px 0 8px;padding-bottom:4px;border-bottom:1px solid #21262d}
+  h3{color:#d29922;font-size:1em;margin:20px 0 6px}
+  p{color:#c9d1d9;margin-bottom:12px;max-width:75ch}
+  ul,ol{color:#c9d1d9;margin:8px 0 16px 20px}
+  li{margin-bottom:4px}
+  .formula{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:14px 18px;margin:12px 0 16px;font-family:"SF Mono","Menlo","Consolas",monospace;font-size:.9em;color:#f0f6fc;overflow-x:auto}
+  .formula .fn{color:#7ee787}
+  .formula .kw{color:#ff7b72}
+  .formula .cm{color:#8b949e}
+  .formula .nm{color:#d2a8ff}
+  .box{border:1px solid #30363d;border-radius:6px;padding:16px;margin:16px 0}
+  .box.g{border-color:#3fb950;background:rgba(63,185,80,.04)}
+  .box.r{border-color:#f85149;background:rgba(248,81,73,.04)}
+  .box.y{border-color:#d29922;background:rgba(210,153,34,.04)}
+  .box label{display:block;font-size:.78em;color:#8b949e;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+  table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:.85em}
+  th{background:#161b22;color:#8b949e;text-transform:uppercase;letter-spacing:.04em;font-weight:600;padding:8px 10px;text-align:left;border-bottom:2px solid #30363d}
+  td{padding:7px 10px;border-bottom:1px solid #161b22;vertical-align:top}
+  tr:hover td{background:rgba(48,54,61,.3)}
+  .g{color:#3fb950}
+  .r{color:#f85149}
+  .o{color:#d29922}
+  .m{color:#8b949e}
+  b,strong{color:#f0f6fc}
+  code{background:#161b22;padding:1px 5px;border-radius:3px;font-size:.88em;color:#f0f6fc}
+  a{color:#58a6ff;text-decoration:none}
+  a:hover{text-decoration:underline}
+  .back{margin-bottom:20px;font-size:.85em}
+  .nav{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0 32px}
+  .nav a{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:10px 16px;color:#c9d1d9;font-size:.85em;transition:border .15s}
+  .nav a:hover{border-color:#58a6ff;text-decoration:none}
+  hr{border:none;border-top:1px solid #21262d;margin:28px 0}
+  .fn{margin-top:32px;padding-top:16px;border-top:1px solid #21262d;color:#8b949e;font-size:.78em}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="back"><a href="./">&larr; Dashboard</a></div>
+
+<h1>Methodology</h1>
+<p class="sub">Three ways to estimate expected returns &mdash; how they work, what they mean, and how to interpret the differences.</p>
+
+<div class="nav">
+  <a href="#capm">CAPM</a>
+  <a href="#total-return">Total Return</a>
+  <a href="#dcf">DCF IRR</a>
+  <a href="#spreads">Spreads</a>
+  <a href="#interpretation">Putting It Together</a>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- CAPM                                                 -->
+<!-- ══════════════════════════════════════════════════ -->
+
+<h2 id="capm">1. CAPM + Country Risk Premium</h2>
+<p><strong>What it measures:</strong> The return an investor <em>should</em> require to compensate for the risk of holding a stock, based on its exposure to market risk and country risk.</p>
+
+<h3>Formula</h3>
+<div class="formula">
+  <span class="fn">E(R)</span> = <span class="nm">Rf</span> + <span class="kw">β<sub>levered</sub></span> &times; <span class="nm">ERP</span> + <span class="kw">λ</span> &times; <span class="nm">CRP</span>
+</div>
+
+<table>
+  <tr><th>Variable</th><th>Source</th><th>What it is</th></tr>
+  <tr><td><strong>Rf</strong></td><td>^TNX (Yahoo Finance)</td><td>Current 10-year US Treasury yield &mdash; the baseline "risk-free" return available to any investor.</td></tr>
+  <tr><td><strong>β<sub>levered</sub></strong></td><td>Damodaran industry betas × company D/E</td><td>Bottom-up levered beta. Starts with the <em>unlevered</em> beta for the company's industry (pure business risk), then relevers it for the company's debt level. A β of 1.0 means the stock moves with the market; &gt;1 means more volatile.</td></tr>
+  <tr><td><strong>ERP</strong></td><td>Damodaran implied ERP</td><td>Equity Risk Premium &mdash; the extra return the stock market as a whole provides over risk-free bonds. Damodaran's "implied" ERP estimates this from current market pricing (currently ~4.8%).</td></tr>
+  <tr><td><strong>λ (lambda)</strong></td><td>Company's revenue geography</td><td>Share of revenues exposed to a risky country. A company with 40% revenue in Brazil has λ=0.40.</td></tr>
+  <tr><td><strong>CRP</strong></td><td>Damodaran country risk file</td><td>Country Risk Premium &mdash; the additional equity risk from operating in a specific country, derived from sovereign default spreads and equity market volatility.</td></tr>
+</table>
+
+<h3>Derivation</h3>
+<ol>
+  <li><strong>Get the risk-free rate</strong> from the 10Y US Treasury. This sets the baseline &mdash; the minimum return any investment should beat.</li>
+  <li><strong>Find the industry's unlevered beta</strong> from Damodaran's database of thousands of US-listed companies, grouped by industry. This isolates pure business risk from financing decisions.</li>
+  <li><strong>Relever it</strong> using the company's debt-to-equity ratio: β<sub>levered</sub> = β<sub>unlevered</sub> × (1 + (1 − tax<sub>rate</sub>) × D/E). More debt = higher risk = higher required return.</li>
+  <li><strong>Multiply by ERP</strong> to convert beta into an expected excess return over the risk-free rate.</li>
+  <li><strong>Add CRP</strong> if the company has material non-US revenue in countries with sovereign risk.</li>
+</ol>
+
+<h3>What the number means</h3>
+<p>A CAPM of <strong>8%</strong> means: "Given this stock's risk profile, you should expect at least 8% annualized return to justify owning it." A high CAPM suggests the stock is risky (high beta, high leverage, high country exposure). A low CAPM suggests defensive positioning or low leverage.</p>
+
+<div class="box y">
+  <label>Typical Range</label>
+  <strong class="o">4–12%</strong> &mdash; Utilities and consumer staples cluster at the low end; tech, small caps, and emerging markets at the high end.
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- TOTAL RETURN                                           -->
+<!-- ══════════════════════════════════════════════════ -->
+
+<h2 id="total-return">2. Total Return Decomposition</h2>
+<p><strong>What it measures:</strong> The return an investor <em>can expect</em> from cash payouts and growth, independent of market pricing. It decomposes shareholder returns into three real sources.</p>
+
+<h3>Formula</h3>
+<div class="formula">
+  <span class="fn">E(R)</span> = <span class="kw">Dividend Yield</span> + <span class="kw">Buyback Yield</span> + <span class="nm">Expected Growth</span>
+</div>
+
+<table>
+  <tr><th>Component</th><th>Source</th><th>What it is</th></tr>
+  <tr><td><strong>Dividend Yield</strong></td><td>Yahoo Finance TTM dividends / Market Cap</td><td>Cash dividends paid over the trailing twelve months as a percentage of market cap. Apple pays ~0.4%, no-dividend stocks like GOOGL get 0%.</td></tr>
+  <tr><td><strong>Buyback Yield</strong></td><td>Yahoo Finance shares outstanding change or cash spent on repurchases / Market Cap</td><td>The reduction in share count from buybacks, expressed as a yield. A 2% share count reduction effectively returns 2% of value to shareholders. For most Mag 7 stocks, buybacks far exceed dividends.</td></tr>
+  <tr><td><strong>Expected Growth</strong></td><td>ROE × Retention Ratio (or industry-based estimate)</td><td>How fast the company can grow earnings by reinvesting profits. If a company earns 30% ROE and retains 60% of earnings, fundamental growth = 18%. Capped at 20% to avoid unrealistic projections.</td></tr>
+</table>
+
+<h3>Derivation</h3>
+<ol>
+  <li><strong>Calculate dividend yield:</strong> Trailing 12-month dividends &divide; current market cap.</li>
+  <li><strong>Calculate buyback yield:</strong> Either the year-over-year decline in shares outstanding, or cash spent on buybacks divided by market cap, whichever is more reliable.</li>
+  <li><strong>Estimate growth:</strong> Start with ROE × retention ratio as the "fundamental" growth rate. If revenue data is available, blend it: fundamental growth and historical revenue growth are averaged (50/50). If only one is available, use it directly.</li>
+  <li><strong>Sum the three components</strong> to get the expected total return.</li>
+</ol>
+
+<h3>What the number means</h3>
+<p>Total Return tells you: "If the company keeps operating as it has been, what return can shareholders expect <em>from the business itself</em>?" It's independent of market price &mdash; it's about fundamentals.</p>
+
+<p>A high Total Return (&gt;15%) suggests the company has strong cash flows (dividends + buybacks) and/or high organic growth potential. A low or negative Total Return suggests a mature or declining business.</p>
+
+<div class="box y">
+  <label>Typical Range</label>
+  <strong class="o">0–20%</strong> &mdash; Mature dividend payers at the low end; high-growth tech at the high end. Capped at ±25% for sanity.
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- DCF IRR                                                -->
+<!-- ══════════════════════════════════════════════════ -->
+
+<h2 id="dcf">3. DCF Implied IRR</h2>
+<p><strong>What it measures:</strong> The return the <em>market price</em> is implying you'll earn if you buy today, given reasonable assumptions about the company's future cash flows.</p>
+
+<h3>Formula</h3>
+<div class="formula">
+  <span class="fn">EV</span> = <span class="kw">&Sigma;</span> <span class="nm">FCFF<sub>t</sub></span> / <span class="nm">(1 + r)<sup>t</sup></span> + <span class="nm">TV</span> / <span class="nm">(1 + r)<sup>5</sup></span><br>
+  <span style="color:#8b949e">where</span> <span class="fn">r</span> <span style="color:#8b949e">is the implied expected return (IRR)</span>
+</div>
+
+<table>
+  <tr><th>Component</th><th>Source</th><th>What it is</th></tr>
+  <tr><td><strong>FCFF</strong></td><td>Projected from EBIT × (1−t) + D&A − Capex − &Delta;WC</td><td>Free Cash Flow to the Firm &mdash; cash available to all capital providers (debt + equity) after reinvestment needs.</td></tr>
+  <tr><td><strong>Revenue growth</strong></td><td>3-year historical CAGR or 5% default</td><td>How fast the top line grows. Capped at 40%, converged to terminal growth in later years.</td></tr>
+  <tr><td><strong>Operating margin</strong></td><td>Company current → Damodaran industry average</td><td>Margins converge linearly from the company's current margin to the industry average over 5 years. If the company already beats industry average, it stays there.</td></tr>
+  <tr><td><strong>Sales/Capital ratio</strong></td><td>Damodaran industry data</td><td>How much revenue each dollar of invested capital generates. Used to compute required reinvestment: more revenue growth needs more capital.</td></tr>
+  <tr><td><strong>Terminal growth (g)</strong></td><td>Geography-adjusted (US: 2.5%, Brazil: 4.5%)</td><td>Perpetual growth rate in the terminal value. Linked to the country's nominal GDP growth potential and risk-free rate.</td></tr>
+  <tr><td><strong>WACC</strong></td><td>Damodaran industry WACC</td><td>Weighted Average Cost of Capital &mdash; used as a discount rate reference, not to solve the IRR.</td></tr>
+</table>
+
+<h3>Derivation (how we solve for r)</h3>
+<ol>
+  <li><strong>Project 5 years</strong> of FCFF. Revenue starts at the company's recent growth rate, gradually declining to the terminal growth rate. Margins converge to industry average.</li>
+  <li><strong>Calculate reinvestment</strong> as revenue growth × capital required (derived from the Sales/Capital ratio).</li>
+  <li><strong>Compute FCFF</strong>: EBIT after tax + depreciation − capex − change in working capital.</li>
+  <li><strong>Calculate terminal value</strong>: TV = FCFF<sub>5</sub> × (1 + g) &divide; (r − g).</li>
+  <li><strong>Solve for r</strong> that makes the present value of all future FCFF + TV equal today's enterprise value. This is the <em>implied IRR</em> &mdash; the market's embedded return expectation.</li>
+</ol>
+
+<h3>What the number means</h3>
+<p>A DCF IRR of <strong>6%</strong> means: "If you buy this company at today's price, and these cash flow projections are accurate, you'll earn about 6% per year."</p>
+
+<p><strong>High IRR</strong> (&gt;10%): The market is pricing the stock cheaply relative to its cash flow potential. This could mean the stock is undervalued, or the market sees risks the DCF doesn't capture.</p>
+
+<p><strong>Low IRR</strong> (&lt;5%): The stock is expensive relative to cash flows. The market is paying a premium, likely for growth or quality that the DCF understates.</p>
+
+<p><strong>N/A (not available)</strong>: The company has negative or inconsistent FCFF projections (common for high-growth companies still investing heavily). The DCF model can't solve a meaningful IRR when cash flows are negative.</p>
+
+<div class="box y">
+  <label>Typical Range</label>
+  <strong class="o">3–15%</strong> &mdash; Low for mega-cap growth stocks with high multiples; high for distressed or cyclical companies. TSLA often caps out at 50%.
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SPREADS                                                -->
+<!-- ══════════════════════════════════════════════════ -->
+
+<h2 id="spreads">4. Spreads: What the Differences Tell You</h2>
+<p>The real insight comes from comparing the three methods. Each spread isolates a different kind of mispricing or insight.</p>
+
+<!-- ── DCF − CAPM ── -->
+<h3>Spread 1: DCF − CAPM</h3>
+<div class="formula">
+  <span class="fn">DCF IRR</span> &minus; <span class="nm">CAPM</span> &nbsp;&nbsp;&nbsp; <span class="cm"># Market expectation vs. required risk premium</span>
+</div>
+
+<p>This spread compares <strong>what the market implies you'll earn</strong> (DCF) against <strong>what you should require for the risk</strong> (CAPM).</p>
+
+<div class="box g">
+  <label>Positive (green) → Attractive</label>
+  <strong>The market is pricing the stock to deliver returns above its cost of equity.</strong> This typically means the stock is cheap &mdash; the price is low enough that future cash flows are expected to yield a high return. Examples: cyclical downturns, temporary bad news creating a buying opportunity.
+</div>
+
+<div class="box r">
+  <label>Negative (red) → Caution</label>
+  <strong>The market's implied return is below the risk-appropriate required return.</strong> The stock is expensive relative to its fundamentals. Investors are paying for growth or safety that the DCF assumptions don't fully capture. Examples: high-multiple growth stocks, bubble territory.
+</div>
+
+<p><strong>Typical range:</strong> &minus;5% to +5%. Outside this range suggests extreme pricing &mdash; either a deep value opportunity or a significant overvaluation.</p>
+
+<!-- ── TR − DCF ── -->
+<h3>Spread 2: Total Return − DCF IRR</h3>
+<div class="formula">
+  <span class="fn">Total Return</span> &minus; <span class="nm">DCF IRR</span> &nbsp;&nbsp;&nbsp; <span class="cm"># Fundamental reality vs. market pricing</span>
+</div>
+
+<p>This compares <strong>what the business fundamentals say you should earn</strong> (dividends + buybacks + growth) against <strong>what the market price implies</strong>.</p>
+
+<div class="box g">
+  <label>Positive (green) → Fundamentals beat the market price</label>
+  <strong>The company's real cash generation and growth potential exceed what the market is pricing in.</strong> The stock may be undervalued &mdash; the market hasn't fully appreciated the company's fundamental earning power.
+</div>
+
+<div class="box r">
+  <label>Negative (red) → Market price exceeds fundamental value</label>
+  <strong>The market expects more from the company than its current fundamentals can deliver.</strong> Either growth will accelerate (bull case) or the stock is overpriced. This is common for high-growth tech where the DCF captures conservative projections but the market is pricing in a more optimistic scenario.
+</div>
+
+<p><strong>Typical range:</strong> &minus;8% to +8%. High-growth stocks tend to have negative spreads here because the market prices in future margin expansion that the DCF gradually converges to.</p>
+
+<!-- ── TR − CAPM ── -->
+<h3>Spread 3: Total Return − CAPM</h3>
+<div class="formula">
+  <span class="fn">Total Return</span> &minus; <span class="nm">CAPM</span> &nbsp;&nbsp;&nbsp; <span class="cm"># Fundamental return vs. risk requirement</span></div>
+
+<p>This compares <strong>what the business delivers from operations</strong> against <strong>what investors should require as compensation for risk</strong>. It's the most "independent" measure &mdash; neither number depends on market price.</p>
+
+<div class="box g">
+  <label>Positive (green) → Business generates excess returns</label>
+  <strong>The company's fundamental return exceeds its cost of equity.</strong> The business is creating value &mdash; its operations earn more than investors require. This is the hallmark of a company with a durable competitive advantage (economic moat).
+</div>
+
+<div class="box r">
+  <label>Negative (red) → Business destroys value</label>
+  <strong>The company doesn't earn enough from operations to compensate for the risk.</strong> Investors would be better off in risk-free bonds. This can happen in distressed industries, turnarounds, or businesses with poor capital allocation.
+</div>
+
+<p><strong>Typical range:</strong> &minus;5% to +10%. Consistently positive spread is a sign of quality &mdash; think of it as the company's "economic profit margin."</p>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- PUTTING IT TOGETHER                                      -->
+<!-- ══════════════════════════════════════════════════ -->
+
+<hr>
+
+<h2 id="interpretation">5. Reading the Dashboard</h2>
+
+<p>Here's how to interpret each row and the overall picture this creates.</p>
+
+<h3>The Top Row: Absolute Returns</h3>
+
+<table>
+  <tr><th style="width:100px">Method</th><th>What It Depends On</th><th>Higher Number</th><th>Lower Number</th></tr>
+  <tr><td><strong>CAPM</strong></td><td>Risk (beta, leverage, country)</td><td>Riskier stock → higher required return</td><td>Safer stock → lower required return</td></tr>
+  <tr><td><strong>Total Return</strong></td><td>Cash flows + growth (fundamentals)</td><td>Strong cash generation, high growth</td><td>Mature, low growth, low payout</td></tr>
+  <tr><td><strong>DCF IRR</strong></td><td>Market price + cash flow projections</td><td>Cheap stock (low price relative to cash flows)</td><td>Expensive stock (high multiples)</td></tr>
+</table>
+
+<h3>The Bottom Row: Spreads</h3>
+
+<table>
+  <tr><th style="width:110px">Spread</th><th>Measures</th><th>Green (+)</th><th>Red (−)</th></tr>
+  <tr><td><strong>DCF−CAPM</strong></td><td>Market vs. risk requirement</td><td>Undervalued</td><td>Overvalued</td></tr>
+  <tr><td><strong>TR−DCF</strong></td><td>Fundamentals vs. market price</td><td>Fundamentals beat market expectations</td><td>Market expects more than fundamentals deliver</td></tr>
+  <tr><td><strong>TR−CAPM</strong></td><td>Fundamentals vs. risk requirement</td><td>Economic moat / value creation</td><td>Value destruction</td></tr>
+</table>
+
+<h3>Putting It All Together</h3>
+
+<div class="box g">
+  <label>Bull Case (all spreads green)</label>
+  <strong>DCF IRR > CAPM</strong> (cheap) + <strong>TR > DCF</strong> (fundamentals strong) + <strong>TR > CAPM</strong> (value creation).<br>
+  The stock is cheap, its fundamentals are strong, and it earns above its cost of equity. This is the ideal combination — deep value with quality.
+</div>
+
+<div class="box r">
+  <label>Bear Case (all spreads red)</label>
+  <strong>DCF IRR &#60; CAPM</strong> (expensive) + <strong>TR &#60; DCF</strong> (market expecting too much) + <strong>TR &#60; CAPM</strong> (value destruction).<br>
+  The stock is expensive, the market expects growth the company can't deliver, and the business doesn't earn its cost of equity. Time to be cautious.
+</div>
+
+<div class="box y">
+  <label>Mixed Signals</label>
+  <p>If <strong>DCF−CAPM is green but TR−DCF is red</strong>: The stock looks cheap, but the market is still pricing in growth the fundamentals don't support. Possible value trap.</p>
+  <p>If <strong>DCF−CAPM is red but TR−CAPM is green</strong>: The stock is expensive, but the underlying business is high quality and creates real value. Premium may be justified.</p>
+  <p>If <strong>TR−DCF is green but TR−CAPM is negative</strong>: Fundamentals are decent and the stock is cheap, but the business doesn't earn enough to justify its risk. Cyclical or distressed.</p>
+</div>
+
+<h3>Limitations</h3>
+<ul>
+  <li><strong>CAPM</strong> relies on a single factor (beta). Real returns are driven by multiple risk factors (value, size, momentum, profitability).</li>
+  <li><strong>Total Return</strong> is backward-looking &mdash; it uses past dividend/buyback/growth data that may not persist.</li>
+  <li><strong>DCF IRR</strong> is only as good as its assumptions. Growth rates, margins, and terminal value are estimates that can be wrong.</li>
+  <li><strong>Spreads</strong> don't mean "buy" or "sell." They're diagnostic tools &mdash; a large negative DCF−CAPM spread for a high-growth company is normal and expected.</li>
+  <li>The models assume everything is denominated in USD. Currency risk, inflation, and regulatory changes are not explicitly captured.</li>
+</ul>
+
+<div class="fn">
+  Data: <a href="https://pages.stern.nyu.edu/~adamodar/" target="_blank">Aswath Damodaran (NYU Stern)</a> / <a href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a><br>
+  Not investment advice. These are analytical tools for understanding market pricing and business fundamentals.
+</div>
+
+</div>
+</body>
+</html>
