@@ -9,150 +9,115 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 20px; }
   .container { max-width: 1200px; margin: 0 auto; }
-  h1 { color: #f0f6fc; font-size: 1.6em; margin-bottom: 4px; }
-  .subtitle { color: #8b949e; font-size: 0.85em; margin-bottom: 20px; }
-  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; }
-  .card h3 { color: #8b949e; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.05em; }
-  .card .val { font-size: 1.3em; font-weight: 700; margin: 4px 0; }
-  .green { color: #3fb950; } .red { color: #f85149; } .orange { color: #d29922; } .blue { color: #58a6ff; }
-  .chart { margin-bottom: 16px; }
-  .footer { color: #8b949e; font-size: 0.8em; text-align: center; margin-top: 30px; padding: 16px; }
-  .note { background: rgba(210,153,34,0.1); border: 1px solid #d29922; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.85em; }
-  .note strong { color: #d29922; }
-  .table-wrap { overflow-x: auto; margin: 20px 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
-  th { background: #21262d; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; padding: 10px 12px; text-align: center; border-bottom: 2px solid #30363d; }
-  td { padding: 8px 12px; text-align: center; border-bottom: 1px solid #21262d; }
+  h1 { color: #f0f6fc; font-size: 1.5em; margin-bottom: 2px; }
+  .sub { color: #8b949e; font-size: 0.8em; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .chart-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 4px; }
+  .note { background: rgba(210,153,34,0.08); border: 1px solid #30363d; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.82em; color: #8b949e; }
+  .note strong { color: #c9d1d9; }
+  .tab-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+  th { background: #161b22; color: #8b949e; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; padding: 8px 10px; text-align: center; border-bottom: 2px solid #30363d; white-space: nowrap; }
+  td { padding: 6px 10px; text-align: center; border-bottom: 1px solid #161b22; font-variant-numeric: tabular-nums; }
   tr:hover td { background: rgba(48,54,61,0.3); }
-  .ticker-cell { color: #f0f6fc; font-weight: 700; text-align: left; }
-  .val-green { color: #3fb950; } .val-red { color: #f85149; } .val-amber { color: #d29922; }
-  h2 { color: #f0f6fc; font-size: 1.2em; margin: 24px 0 12px; }
-  .filter-hint { color: #8b949e; font-size: 0.75em; margin-bottom: 4px; }
-  @media (max-width: 600px) { .summary { grid-template-columns: 1fr; } }
+  .tc { color: #f0f6fc; font-weight: 700; text-align: left; }
+  .va-green { color: #3fb950; } .va-red { color: #f85149; } .va-amber { color: #d29922; }
+  h2 { color: #f0f6fc; font-size: 1.1em; margin: 18px 0 8px; }
+  .fn { color: #8b949e; font-size: 0.75em; text-align: center; margin-top: 24px; padding: 12px; border-top: 1px solid #21262d; }
+  .ref-row td { color: #8b949e; font-size: 0.85em; }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>📊 Mag 7 Expected Returns — Trends</h1>
-  <p class="subtitle">Last updated: 2026-04-30 04:05 UTC · CAPM + CRP · Total Return Decomposition · FCFF DCF → IRR</p>
+  <h1>📊 Mag 7 + SPY — Expected Returns</h1>
+  <p class="sub">Last updated: 2026-04-30 04:12 UTC · CAPM+CRP · Total Return Decomposition · FCFF DCF→IRR</p>
 
   <div class="note">
-    <strong>How to read this:</strong> Top chart shows 3 expected return estimates per stock.
-    Bottom chart shows spreads — when <span style="color:#3fb950">DCF−CAPM > 0</span>, the stock is priced attractively relative to its risk.
-    When <span style="color:#d29922">TotalReturn−DCF</span> is wide and positive, the market hasn't priced in the company's organic growth.
-    Use the dropdown to switch between stocks. The <strong>Y-axis</strong> dropdown next to it lets you clip outliers (like TSLA's 50% capped DCF) to see the rest more clearly.
+    <strong>2×2 grid by method:</strong>
+    <strong style="color:#58a6ff">CAPM</strong> with Rf / ERP / Market reference lines ·
+    <strong style="color:#3fb950">Total Return</strong> (div yield + buyback + growth) ·
+    <strong style="color:#d29922">DCF IRR</strong> (implied by current price) ·
+    <strong style="color:#f85149">DCF−CAPM</strong> spread — green = attractively valued
   </div>
 
-  <p class="filter-hint">▼ Ticker · ▼ Y-axis max</p>
-  <div id="rates-chart" class="chart"></div>
-  <div id="spreads-chart" class="chart"></div>
+  <div class="grid" id="chart-grid">
+    <div class="chart-box"><div id="c1"></div></div>
+    <div class="chart-box"><div id="c2"></div></div>
+    <div class="chart-box"><div id="c3"></div></div>
+    <div class="chart-box"><div id="c4"></div></div>
+  </div>
 
   <h2>📋 Latest Snapshot</h2>
-  <div class="table-wrap">
+  <div class="tab-wrap">
   <table>
     <thead>
-      <tr><th>Ticker</th><th>Market Cap</th><th>CAPM</th><th>Total Return</th><th>DCF IRR</th><th>DCF−CAPM</th><th>TR−DCF</th></tr>
+      <tr>
+        <th style="text-align:left">Ticker</th>
+        <th>CAPM</th>
+        <th>Total Return</th>
+        <th>DCF IRR</th>
+        <th>DCF−CAPM</th>
+        <th>TR−DCF</th>
+      </tr>
     </thead>
-    <tbody><tr>
-    <td class="ticker-cell">AAPL</td>
-    <td>{mcap}</td>
-    <td><span class="val-red">7.63%</span></td>
-    <td><span class="val-red">4.48%</span></td>
-    <td><span class="val-red">5.29%</span></td>
-    <td><span class="val-red">-2.33%</span></td>
-    <td><span class="val-red">-0.81%</span></td>
-</tr><tr>
-    <td class="ticker-cell">AMZN</td>
-    <td>{mcap}</td>
-    <td><span class="val-red">5.78%</span></td>
-    <td><span class="val-amber">11.73%</span></td>
-    <td><span class="val-red">4.57%</span></td>
-    <td><span class="val-red">-1.21%</span></td>
-    <td><span class="val-green">7.16%</span></td>
-</tr><tr>
-    <td class="ticker-cell">GOOGL</td>
-    <td>{mcap}</td>
-    <td><span class="val-red">5.55%</span></td>
-    <td><span class="val-amber">13.83%</span></td>
-    <td><span class="val-red">5.48%</span></td>
-    <td><span class="val-red">-0.07%</span></td>
-    <td><span class="val-green">8.36%</span></td>
-</tr><tr>
-    <td class="ticker-cell">META</td>
-    <td>{mcap}</td>
-    <td><span class="val-red">6.13%</span></td>
-    <td><span class="val-green">21.75%</span></td>
-    <td><span class="val-red">7.28%</span></td>
-    <td><span class="val-green">1.15%</span></td>
-    <td><span class="val-green">14.47%</span></td>
-</tr><tr>
-    <td class="ticker-cell">MSFT</td>
-    <td>{mcap}</td>
-    <td><span class="val-red">5.95%</span></td>
-    <td><span class="val-amber">13.86%</span></td>
-    <td><span class="val-red">6.35%</span></td>
-    <td><span class="val-green">0.40%</span></td>
-    <td><span class="val-green">7.52%</span></td>
-</tr><tr>
-    <td class="ticker-cell">NVDA</td>
-    <td>{mcap}</td>
-    <td><span class="val-red">7.75%</span></td>
-    <td><span class="val-green">20.81%</span></td>
-    <td><span class="val-red">6.26%</span></td>
-    <td><span class="val-red">-1.49%</span></td>
-    <td><span class="val-green">14.55%</span></td>
-</tr><tr>
-    <td class="ticker-cell">TSLA</td>
-    <td>{mcap}</td>
-    <td><span class="val-red">6.96%</span></td>
-    <td><span class="val-red">5.19%</span></td>
-    <td><span class="val-green">50.00%</span></td>
-    <td><span class="val-green">43.04%</span></td>
-    <td><span class="val-red">-44.81%</span></td>
-</tr></tbody>
+    <tbody>
+      <tr><td class="tc">AAPL</td><td><span class="va-red">7.63%</span></td><td><span class="va-red">4.48%</span></td><td><span class="va-red">5.29%</span></td><td><span class="va-red">-2.33pp</span></td><td><span class="va-red">-0.81pp</span></td></tr><tr><td class="tc">MSFT</td><td><span class="va-red">5.95%</span></td><td><span class="va-amber">13.86%</span></td><td><span class="va-red">6.35%</span></td><td><span class="va-green">+0.40pp</span></td><td><span class="va-green">+7.52pp</span></td></tr><tr><td class="tc">GOOGL</td><td><span class="va-red">5.55%</span></td><td><span class="va-amber">13.83%</span></td><td><span class="va-red">5.48%</span></td><td><span class="va-red">-0.07pp</span></td><td><span class="va-green">+8.36pp</span></td></tr><tr><td class="tc">AMZN</td><td><span class="va-red">5.78%</span></td><td><span class="va-amber">11.73%</span></td><td><span class="va-red">4.57%</span></td><td><span class="va-red">-1.21pp</span></td><td><span class="va-green">+7.16pp</span></td></tr><tr><td class="tc">NVDA</td><td><span class="va-red">7.75%</span></td><td><span class="va-green">20.81%</span></td><td><span class="va-red">6.26%</span></td><td><span class="va-red">-1.49pp</span></td><td><span class="va-green">+14.55pp</span></td></tr><tr><td class="tc">META</td><td><span class="va-red">6.13%</span></td><td><span class="va-green">21.75%</span></td><td><span class="va-red">7.28%</span></td><td><span class="va-green">+1.15pp</span></td><td><span class="va-green">+14.47pp</span></td></tr><tr><td class="tc">TSLA</td><td><span class="va-red">6.96%</span></td><td><span class="va-red">5.19%</span></td><td><span class="va-green">50.00%</span></td><td><span class="va-green">+43.04pp</span></td><td><span class="va-red">-44.81pp</span></td></tr><tr><td class="tc">SPY</td><td><span class="va-red">6.38%</span></td><td><span class="va-red">0.80%</span></td><td><span class="va-amber">—</span></td><td><span class="va-amber">—</span></td><td><span class="va-amber">—</span></td></tr>
+      <tr class="ref-row">
+        <td class="tc">Rf</td>
+        <td><span style="color:#8b949e">1.01%</span></td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr class="ref-row">
+        <td class="tc">ERP</td>
+        <td><span style="color:#8b949e">4.18%</span></td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr class="ref-row">
+        <td class="tc">Market (Rf+ERP)</td>
+        <td><span style="color:#8b949e">5.19%</span></td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+    </tbody>
   </table>
   </div>
 </div>
 
 <script>
-  // ── Render rates chart ──
-  Plotly.newPlot('rates-chart', [{"name": "AAPL \u2014 CAPM", "x": ["2026-04-30"], "y": [7.625229061227566], "mode": "lines+markers", "visible": true, "line": {"dash": "dash"}, "hovertemplate": "AAPL CAPM: %{y:.2f}%<extra></extra>"}, {"name": "AAPL \u2014 Total Return", "x": ["2026-04-30"], "y": [4.484462005157475], "mode": "lines+markers", "visible": true, "hovertemplate": "AAPL Total Return: %{y:.2f}%<extra></extra>"}, {"name": "AAPL \u2014 DCF IRR", "x": ["2026-04-30"], "y": [5.293567321436445], "mode": "lines+markers", "visible": true, "hovertemplate": "AAPL DCF IRR: %{y:.2f}%<extra></extra>"}, {"name": "AMZN \u2014 CAPM", "x": ["2026-04-30"], "y": [5.780845234499035], "mode": "lines+markers", "visible": false, "line": {"dash": "dash"}, "hovertemplate": "AMZN CAPM: %{y:.2f}%<extra></extra>"}, {"name": "AMZN \u2014 Total Return", "x": ["2026-04-30"], "y": [11.731283601806396], "mode": "lines+markers", "visible": false, "hovertemplate": "AMZN Total Return: %{y:.2f}%<extra></extra>"}, {"name": "AMZN \u2014 DCF IRR", "x": ["2026-04-30"], "y": [4.569214555967197], "mode": "lines+markers", "visible": false, "hovertemplate": "AMZN DCF IRR: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL \u2014 CAPM", "x": ["2026-04-30"], "y": [5.547004542729007], "mode": "lines+markers", "visible": false, "line": {"dash": "dash"}, "hovertemplate": "GOOGL CAPM: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL \u2014 Total Return", "x": ["2026-04-30"], "y": [13.831515155189877], "mode": "lines+markers", "visible": false, "hovertemplate": "GOOGL Total Return: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL \u2014 DCF IRR", "x": ["2026-04-30"], "y": [5.476057802184197], "mode": "lines+markers", "visible": false, "hovertemplate": "GOOGL DCF IRR: %{y:.2f}%<extra></extra>"}, {"name": "META \u2014 CAPM", "x": ["2026-04-30"], "y": [6.131625295836478], "mode": "lines+markers", "visible": false, "line": {"dash": "dash"}, "hovertemplate": "META CAPM: %{y:.2f}%<extra></extra>"}, {"name": "META \u2014 Total Return", "x": ["2026-04-30"], "y": [21.753031178094993], "mode": "lines+markers", "visible": false, "hovertemplate": "META Total Return: %{y:.2f}%<extra></extra>"}, {"name": "META \u2014 DCF IRR", "x": ["2026-04-30"], "y": [7.283803396580665], "mode": "lines+markers", "visible": false, "hovertemplate": "META DCF IRR: %{y:.2f}%<extra></extra>"}, {"name": "MSFT \u2014 CAPM", "x": ["2026-04-30"], "y": [5.9474702595221745], "mode": "lines+markers", "visible": false, "line": {"dash": "dash"}, "hovertemplate": "MSFT CAPM: %{y:.2f}%<extra></extra>"}, {"name": "MSFT \u2014 Total Return", "x": ["2026-04-30"], "y": [13.86455683893776], "mode": "lines+markers", "visible": false, "hovertemplate": "MSFT Total Return: %{y:.2f}%<extra></extra>"}, {"name": "MSFT \u2014 DCF IRR", "x": ["2026-04-30"], "y": [6.34879310837668], "mode": "lines+markers", "visible": false, "hovertemplate": "MSFT DCF IRR: %{y:.2f}%<extra></extra>"}, {"name": "NVDA \u2014 CAPM", "x": ["2026-04-30"], "y": [7.750931298528274], "mode": "lines+markers", "visible": false, "line": {"dash": "dash"}, "hovertemplate": "NVDA CAPM: %{y:.2f}%<extra></extra>"}, {"name": "NVDA \u2014 Total Return", "x": ["2026-04-30"], "y": [20.807307194667757], "mode": "lines+markers", "visible": false, "hovertemplate": "NVDA Total Return: %{y:.2f}%<extra></extra>"}, {"name": "NVDA \u2014 DCF IRR", "x": ["2026-04-30"], "y": [6.2581886767909305], "mode": "lines+markers", "visible": false, "hovertemplate": "NVDA DCF IRR: %{y:.2f}%<extra></extra>"}, {"name": "TSLA \u2014 CAPM", "x": ["2026-04-30"], "y": [6.9592033248626], "mode": "lines+markers", "visible": false, "line": {"dash": "dash"}, "hovertemplate": "TSLA CAPM: %{y:.2f}%<extra></extra>"}, {"name": "TSLA \u2014 Total Return", "x": ["2026-04-30"], "y": [5.1943257367141005], "mode": "lines+markers", "visible": false, "hovertemplate": "TSLA Total Return: %{y:.2f}%<extra></extra>"}, {"name": "TSLA \u2014 DCF IRR", "x": ["2026-04-30"], "y": [50.0], "mode": "lines+markers", "visible": false, "hovertemplate": "TSLA DCF IRR: %{y:.2f}%<extra></extra>"}], {"template": "plotly_dark", "paper_bgcolor": "#0d1117", "plot_bgcolor": "#0d1117", "font": {"color": "#c9d1d9"}, "hovermode": "x unified", "updatemenus": [{"buttons": [{"method": "update", "label": "All", "args": [{"visible": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]}]}, {"method": "update", "label": "AAPL", "args": [{"visible": [true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "AMZN", "args": [{"visible": [false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "GOOGL", "args": [{"visible": [false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "META", "args": [{"visible": [false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "MSFT", "args": [{"visible": [false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false]}]}, {"method": "update", "label": "NVDA", "args": [{"visible": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false]}]}, {"method": "update", "label": "TSLA", "args": [{"visible": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true]}]}], "direction": "down", "showactive": true, "x": 0.02, "y": 1.15, "xanchor": "left", "yanchor": "top", "bgcolor": "#21262d", "font": {"color": "#c9d1d9"}}, {"buttons": [{"method": "relayout", "label": "Auto", "args": [{"yaxis.range": null}]}, {"method": "relayout", "label": "\u2264 30%", "args": [{"yaxis.range": [null, 30]}]}, {"method": "relayout", "label": "\u2264 20%", "args": [{"yaxis.range": [null, 20]}]}, {"method": "relayout", "label": "\u2264 15%", "args": [{"yaxis.range": [null, 15]}]}, {"method": "relayout", "label": "\u2264 10%", "args": [{"yaxis.range": [null, 10]}]}], "direction": "down", "showactive": true, "x": 0.02, "y": 1.25, "xanchor": "left", "yanchor": "top", "bgcolor": "#21262d", "font": {"color": "#c9d1d9"}}], "title": {"text": "Expected Returns \u2014 Rates", "font": {"size": 18}, "x": 0.5}, "xaxis": {"title": "Date", "gridcolor": "#30363d"}, "yaxis": {"title": "Expected Return (%)", "gridcolor": "#30363d", "zerolinecolor": "#30363d", "tickformat": ".1f"}, "margin": {"t": 100, "b": 40, "r": 20, "l": 60}, "legend": {"font": {"size": 10}}, "height": 400}, {
-    responsive: true,
-    displayModeBar: false,
-  });
+Plotly.newPlot('c1', [{"name": "AAPL", "x": ["2026-04-30"], "y": [7.625229061227566], "mode": "lines+markers", "line": {"color": "#555555", "width": 1.5}, "marker": {"size": 4, "color": "#555555"}, "hovertemplate": "AAPL: %{y:.2f}%<extra></extra>"}, {"name": "MSFT", "x": ["2026-04-30"], "y": [5.9474702595221745], "mode": "lines+markers", "line": {"color": "#00a4ef", "width": 1.5}, "marker": {"size": 4, "color": "#00a4ef"}, "hovertemplate": "MSFT: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL", "x": ["2026-04-30"], "y": [5.547004542729007], "mode": "lines+markers", "line": {"color": "#34a853", "width": 1.5}, "marker": {"size": 4, "color": "#34a853"}, "hovertemplate": "GOOGL: %{y:.2f}%<extra></extra>"}, {"name": "AMZN", "x": ["2026-04-30"], "y": [5.780845234499035], "mode": "lines+markers", "line": {"color": "#ff9900", "width": 1.5}, "marker": {"size": 4, "color": "#ff9900"}, "hovertemplate": "AMZN: %{y:.2f}%<extra></extra>"}, {"name": "NVDA", "x": ["2026-04-30"], "y": [7.750931298528274], "mode": "lines+markers", "line": {"color": "#76b900", "width": 1.5}, "marker": {"size": 4, "color": "#76b900"}, "hovertemplate": "NVDA: %{y:.2f}%<extra></extra>"}, {"name": "META", "x": ["2026-04-30"], "y": [6.131625295836478], "mode": "lines+markers", "line": {"color": "#1877f2", "width": 1.5}, "marker": {"size": 4, "color": "#1877f2"}, "hovertemplate": "META: %{y:.2f}%<extra></extra>"}, {"name": "TSLA", "x": ["2026-04-30"], "y": [6.9592033248626], "mode": "lines+markers", "line": {"color": "#e82127", "width": 1.5}, "marker": {"size": 4, "color": "#e82127"}, "hovertemplate": "TSLA: %{y:.2f}%<extra></extra>"}, {"name": "SPY", "x": ["2026-04-30"], "y": [6.384196735815276], "mode": "lines+markers", "line": {"color": "#f0f6fc", "width": 1, "dash": "dot"}, "marker": {"size": 4, "color": "#f0f6fc"}, "hovertemplate": "SPY: %{y:.2f}%<extra></extra>"}, {"name": "Rf (10Y)", "x": ["2026-04-30", "2026-04-30"], "y": [1.0119617224880384, 1.0119617224880384], "mode": "lines", "line": {"color": "#8b949e", "width": 1, "dash": "dash"}, "hovertemplate": "Rf: 1.01%<extra></extra>", "showlegend": true}, {"name": "ERP", "x": ["2026-04-30", "2026-04-30"], "y": [4.18, 4.18], "mode": "lines", "line": {"color": "#8b949e", "width": 1, "dash": "dot"}, "hovertemplate": "ERP: 4.18%<extra></extra>", "showlegend": true}, {"name": "Rf + ERP (Market)", "x": ["2026-04-30", "2026-04-30"], "y": [5.191961722488038, 5.191961722488038], "mode": "lines", "line": {"color": "#d29922", "width": 1, "dash": "dot"}, "hovertemplate": "Rf+ERP: 5.19%<extra></extra>", "showlegend": true}], {"template": "plotly_dark", "paper_bgcolor": "#161b22", "plot_bgcolor": "#0d1117", "font": {"color": "#c9d1d9"}, "hovermode": "x unified", "title": {"text": "CAPM", "font": {"size": 13}, "x": 0.0, "yanchor": "top"}, "xaxis": {"title": "", "gridcolor": "#21262d", "zerolinecolor": "#21262d", "showticklabels": false}, "yaxis": {"title": "Expected Return (%)", "gridcolor": "#21262d", "zerolinecolor": "#30363d", "tickformat": ".1f"}, "margin": {"t": 36, "b": 4, "r": 8, "l": 48}, "legend": {"font": {"size": 9}, "orientation": "h", "y": 1.12, "x": 0.0}, "height": 300, "showlegend": true}, {responsive:true,displayModeBar:false});
+Plotly.newPlot('c2', [{"name": "AAPL", "x": ["2026-04-30"], "y": [4.484462005157475], "mode": "lines+markers", "line": {"color": "#555555", "width": 1.5}, "marker": {"size": 4, "color": "#555555"}, "hovertemplate": "AAPL: %{y:.2f}%<extra></extra>"}, {"name": "MSFT", "x": ["2026-04-30"], "y": [13.86455683893776], "mode": "lines+markers", "line": {"color": "#00a4ef", "width": 1.5}, "marker": {"size": 4, "color": "#00a4ef"}, "hovertemplate": "MSFT: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL", "x": ["2026-04-30"], "y": [13.831515155189877], "mode": "lines+markers", "line": {"color": "#34a853", "width": 1.5}, "marker": {"size": 4, "color": "#34a853"}, "hovertemplate": "GOOGL: %{y:.2f}%<extra></extra>"}, {"name": "AMZN", "x": ["2026-04-30"], "y": [11.731283601806396], "mode": "lines+markers", "line": {"color": "#ff9900", "width": 1.5}, "marker": {"size": 4, "color": "#ff9900"}, "hovertemplate": "AMZN: %{y:.2f}%<extra></extra>"}, {"name": "NVDA", "x": ["2026-04-30"], "y": [20.807307194667757], "mode": "lines+markers", "line": {"color": "#76b900", "width": 1.5}, "marker": {"size": 4, "color": "#76b900"}, "hovertemplate": "NVDA: %{y:.2f}%<extra></extra>"}, {"name": "META", "x": ["2026-04-30"], "y": [21.753031178094993], "mode": "lines+markers", "line": {"color": "#1877f2", "width": 1.5}, "marker": {"size": 4, "color": "#1877f2"}, "hovertemplate": "META: %{y:.2f}%<extra></extra>"}, {"name": "TSLA", "x": ["2026-04-30"], "y": [5.1943257367141005], "mode": "lines+markers", "line": {"color": "#e82127", "width": 1.5}, "marker": {"size": 4, "color": "#e82127"}, "hovertemplate": "TSLA: %{y:.2f}%<extra></extra>"}, {"name": "SPY", "x": ["2026-04-30"], "y": [0.7955711000000001], "mode": "lines+markers", "line": {"color": "#f0f6fc", "width": 1, "dash": "dot"}, "marker": {"size": 4, "color": "#f0f6fc"}, "hovertemplate": "SPY: %{y:.2f}%<extra></extra>"}], {"template": "plotly_dark", "paper_bgcolor": "#161b22", "plot_bgcolor": "#0d1117", "font": {"color": "#c9d1d9"}, "hovermode": "x unified", "title": {"text": "Total Return", "font": {"size": 13}, "x": 0.0, "yanchor": "top"}, "xaxis": {"title": "", "gridcolor": "#21262d", "zerolinecolor": "#21262d", "showticklabels": false}, "yaxis": {"title": "Expected Return (%)", "gridcolor": "#21262d", "zerolinecolor": "#30363d", "tickformat": ".1f"}, "margin": {"t": 36, "b": 4, "r": 8, "l": 48}, "legend": {"font": {"size": 9}, "orientation": "h", "y": 1.12, "x": 0.0}, "height": 300, "showlegend": true}, {responsive:true,displayModeBar:false});
+Plotly.newPlot('c3', [{"name": "AAPL", "x": ["2026-04-30"], "y": [5.293567321436445], "mode": "lines+markers", "line": {"color": "#555555", "width": 1.5}, "marker": {"size": 4, "color": "#555555"}, "hovertemplate": "AAPL: %{y:.2f}%<extra></extra>"}, {"name": "MSFT", "x": ["2026-04-30"], "y": [6.34879310837668], "mode": "lines+markers", "line": {"color": "#00a4ef", "width": 1.5}, "marker": {"size": 4, "color": "#00a4ef"}, "hovertemplate": "MSFT: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL", "x": ["2026-04-30"], "y": [5.476057802184197], "mode": "lines+markers", "line": {"color": "#34a853", "width": 1.5}, "marker": {"size": 4, "color": "#34a853"}, "hovertemplate": "GOOGL: %{y:.2f}%<extra></extra>"}, {"name": "AMZN", "x": ["2026-04-30"], "y": [4.569214555967197], "mode": "lines+markers", "line": {"color": "#ff9900", "width": 1.5}, "marker": {"size": 4, "color": "#ff9900"}, "hovertemplate": "AMZN: %{y:.2f}%<extra></extra>"}, {"name": "NVDA", "x": ["2026-04-30"], "y": [6.2581886767909305], "mode": "lines+markers", "line": {"color": "#76b900", "width": 1.5}, "marker": {"size": 4, "color": "#76b900"}, "hovertemplate": "NVDA: %{y:.2f}%<extra></extra>"}, {"name": "META", "x": ["2026-04-30"], "y": [7.283803396580665], "mode": "lines+markers", "line": {"color": "#1877f2", "width": 1.5}, "marker": {"size": 4, "color": "#1877f2"}, "hovertemplate": "META: %{y:.2f}%<extra></extra>"}, {"name": "TSLA", "x": ["2026-04-30"], "y": [50.0], "mode": "lines+markers", "line": {"color": "#e82127", "width": 1.5}, "marker": {"size": 4, "color": "#e82127"}, "hovertemplate": "TSLA: %{y:.2f}%<extra></extra>"}, {"name": "SPY", "x": ["2026-04-30"], "y": [null], "mode": "lines+markers", "line": {"color": "#f0f6fc", "width": 1, "dash": "dot"}, "marker": {"size": 4, "color": "#f0f6fc"}, "hovertemplate": "SPY: %{y:.2f}%<extra></extra>"}], {"template": "plotly_dark", "paper_bgcolor": "#161b22", "plot_bgcolor": "#0d1117", "font": {"color": "#c9d1d9"}, "hovermode": "x unified", "title": {"text": "DCF IRR", "font": {"size": 13}, "x": 0.0, "yanchor": "top"}, "xaxis": {"title": "", "gridcolor": "#21262d", "zerolinecolor": "#21262d", "showticklabels": false}, "yaxis": {"title": "Implied Return (%)", "gridcolor": "#21262d", "zerolinecolor": "#30363d", "tickformat": ".1f"}, "margin": {"t": 36, "b": 4, "r": 8, "l": 48}, "legend": {"font": {"size": 9}, "orientation": "h", "y": 1.12, "x": 0.0}, "height": 300, "showlegend": true}, {responsive:true,displayModeBar:false});
+Plotly.newPlot('c4', [{"name": "AAPL", "x": ["2026-04-30"], "y": [-2.331661739791121], "mode": "lines+markers", "line": {"color": "#555555", "width": 1.5}, "marker": {"size": 4, "color": "#555555"}, "hovertemplate": "AAPL: %{y:.2f}pp<extra></extra>"}, {"name": "MSFT", "x": ["2026-04-30"], "y": [0.4013228488545052], "mode": "lines+markers", "line": {"color": "#00a4ef", "width": 1.5}, "marker": {"size": 4, "color": "#00a4ef"}, "hovertemplate": "MSFT: %{y:.2f}pp<extra></extra>"}, {"name": "GOOGL", "x": ["2026-04-30"], "y": [-0.07094674054480901], "mode": "lines+markers", "line": {"color": "#34a853", "width": 1.5}, "marker": {"size": 4, "color": "#34a853"}, "hovertemplate": "GOOGL: %{y:.2f}pp<extra></extra>"}, {"name": "AMZN", "x": ["2026-04-30"], "y": [-1.2116306785318374], "mode": "lines+markers", "line": {"color": "#ff9900", "width": 1.5}, "marker": {"size": 4, "color": "#ff9900"}, "hovertemplate": "AMZN: %{y:.2f}pp<extra></extra>"}, {"name": "NVDA", "x": ["2026-04-30"], "y": [-1.4927426217373432], "mode": "lines+markers", "line": {"color": "#76b900", "width": 1.5}, "marker": {"size": 4, "color": "#76b900"}, "hovertemplate": "NVDA: %{y:.2f}pp<extra></extra>"}, {"name": "META", "x": ["2026-04-30"], "y": [1.1521781007441876], "mode": "lines+markers", "line": {"color": "#1877f2", "width": 1.5}, "marker": {"size": 4, "color": "#1877f2"}, "hovertemplate": "META: %{y:.2f}pp<extra></extra>"}, {"name": "TSLA", "x": ["2026-04-30"], "y": [43.0407966751374], "mode": "lines+markers", "line": {"color": "#e82127", "width": 1.5}, "marker": {"size": 4, "color": "#e82127"}, "hovertemplate": "TSLA: %{y:.2f}pp<extra></extra>"}, {"name": "SPY", "x": ["2026-04-30"], "y": [null], "mode": "lines+markers", "line": {"color": "#f0f6fc", "width": 1, "dash": "dot"}, "marker": {"size": 4, "color": "#f0f6fc"}, "hovertemplate": "SPY: %{y:.2f}pp<extra></extra>"}], {"template": "plotly_dark", "paper_bgcolor": "#161b22", "plot_bgcolor": "#0d1117", "font": {"color": "#c9d1d9"}, "hovermode": "x unified", "title": {"text": "DCF \u2212 CAPM Spread", "font": {"size": 13}, "x": 0.0, "yanchor": "top"}, "xaxis": {"title": "", "gridcolor": "#21262d", "zerolinecolor": "#21262d", "showticklabels": false}, "yaxis": {"title": "Spread (pp)", "gridcolor": "#21262d", "zerolinecolor": "#30363d", "tickformat": ".1f"}, "margin": {"t": 36, "b": 4, "r": 8, "l": 48}, "legend": {"font": {"size": 9}, "orientation": "h", "y": 1.12, "x": 0.0}, "height": 300, "showlegend": true}, {responsive:true,displayModeBar:false});
 
-  // ── Render spreads chart ──
-  Plotly.newPlot('spreads-chart', [{"name": "AAPL \u2014 DCF\u2212CAPM", "x": ["2026-04-30"], "y": [-2.331661739791121], "mode": "lines+markers", "visible": true, "line": {"dash": "dot"}, "hovertemplate": "AAPL DCF\u2212CAPM: %{y:.2f}%<extra></extra>"}, {"name": "AAPL \u2014 TotalReturn\u2212DCF", "x": ["2026-04-30"], "y": [-0.8091053162789706], "mode": "lines+markers", "visible": true, "hovertemplate": "AAPL TR\u2212DCF: %{y:.2f}%<extra></extra>"}, {"name": "AMZN \u2014 DCF\u2212CAPM", "x": ["2026-04-30"], "y": [-1.2116306785318374], "mode": "lines+markers", "visible": false, "line": {"dash": "dot"}, "hovertemplate": "AMZN DCF\u2212CAPM: %{y:.2f}%<extra></extra>"}, {"name": "AMZN \u2014 TotalReturn\u2212DCF", "x": ["2026-04-30"], "y": [7.162069045839201], "mode": "lines+markers", "visible": false, "hovertemplate": "AMZN TR\u2212DCF: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL \u2014 DCF\u2212CAPM", "x": ["2026-04-30"], "y": [-0.07094674054480901], "mode": "lines+markers", "visible": false, "line": {"dash": "dot"}, "hovertemplate": "GOOGL DCF\u2212CAPM: %{y:.2f}%<extra></extra>"}, {"name": "GOOGL \u2014 TotalReturn\u2212DCF", "x": ["2026-04-30"], "y": [8.35545735300568], "mode": "lines+markers", "visible": false, "hovertemplate": "GOOGL TR\u2212DCF: %{y:.2f}%<extra></extra>"}, {"name": "META \u2014 DCF\u2212CAPM", "x": ["2026-04-30"], "y": [1.1521781007441876], "mode": "lines+markers", "visible": false, "line": {"dash": "dot"}, "hovertemplate": "META DCF\u2212CAPM: %{y:.2f}%<extra></extra>"}, {"name": "META \u2014 TotalReturn\u2212DCF", "x": ["2026-04-30"], "y": [14.469227781514329], "mode": "lines+markers", "visible": false, "hovertemplate": "META TR\u2212DCF: %{y:.2f}%<extra></extra>"}, {"name": "MSFT \u2014 DCF\u2212CAPM", "x": ["2026-04-30"], "y": [0.4013228488545052], "mode": "lines+markers", "visible": false, "line": {"dash": "dot"}, "hovertemplate": "MSFT DCF\u2212CAPM: %{y:.2f}%<extra></extra>"}, {"name": "MSFT \u2014 TotalReturn\u2212DCF", "x": ["2026-04-30"], "y": [7.515763730561082], "mode": "lines+markers", "visible": false, "hovertemplate": "MSFT TR\u2212DCF: %{y:.2f}%<extra></extra>"}, {"name": "NVDA \u2014 DCF\u2212CAPM", "x": ["2026-04-30"], "y": [-1.4927426217373432], "mode": "lines+markers", "visible": false, "line": {"dash": "dot"}, "hovertemplate": "NVDA DCF\u2212CAPM: %{y:.2f}%<extra></extra>"}, {"name": "NVDA \u2014 TotalReturn\u2212DCF", "x": ["2026-04-30"], "y": [14.549118517876824], "mode": "lines+markers", "visible": false, "hovertemplate": "NVDA TR\u2212DCF: %{y:.2f}%<extra></extra>"}, {"name": "TSLA \u2014 DCF\u2212CAPM", "x": ["2026-04-30"], "y": [43.0407966751374], "mode": "lines+markers", "visible": false, "line": {"dash": "dot"}, "hovertemplate": "TSLA DCF\u2212CAPM: %{y:.2f}%<extra></extra>"}, {"name": "TSLA \u2014 TotalReturn\u2212DCF", "x": ["2026-04-30"], "y": [-44.8056742632859], "mode": "lines+markers", "visible": false, "hovertemplate": "TSLA TR\u2212DCF: %{y:.2f}%<extra></extra>"}], {"template": "plotly_dark", "paper_bgcolor": "#0d1117", "plot_bgcolor": "#0d1117", "font": {"color": "#c9d1d9"}, "hovermode": "x unified", "updatemenus": [{"buttons": [{"method": "update", "label": "All", "args": [{"visible": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]}]}, {"method": "update", "label": "AAPL", "args": [{"visible": [true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "AMZN", "args": [{"visible": [false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "GOOGL", "args": [{"visible": [false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "META", "args": [{"visible": [false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false]}]}, {"method": "update", "label": "MSFT", "args": [{"visible": [false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false]}]}, {"method": "update", "label": "NVDA", "args": [{"visible": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false]}]}, {"method": "update", "label": "TSLA", "args": [{"visible": [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true]}]}], "direction": "down", "showactive": true, "x": 0.02, "y": 1.15, "xanchor": "left", "yanchor": "top", "bgcolor": "#21262d", "font": {"color": "#c9d1d9"}}], "title": {"text": "Spreads (Valuation Signal)", "font": {"size": 18}, "x": 0.5}, "xaxis": {"title": "Date", "gridcolor": "#30363d"}, "yaxis": {"title": "Spread (%)", "gridcolor": "#30363d", "zerolinecolor": "#f85149", "zerolinewidth": 1, "tickformat": ".1f"}, "margin": {"t": 100, "b": 40, "r": 20, "l": 60}, "legend": {"font": {"size": 10}}, "height": 350, "showlegend": true}, {
-    responsive: true,
-    displayModeBar: false,
-  });
-
-  // ── Sync dropdowns ──
-  document.getElementById('rates-chart').on('plotly_restyle', function(ev) {
-    // Sync spread chart dropdown to match
-    var idx = ev[0]?.visible?.indexOf(true) ?? 0;
-    if (idx >= 0) {
-      var spreadChart = document.getElementById('spreads-chart');
-      // Find which ticker this corresponds to
-      var tickerIdx = Math.floor(idx / 3);
-      var tickers = ["AAPL", "AMZN", "GOOGL", "META", "MSFT", "NVDA", "TSLA"];
-      if (tickerIdx >= 0 && tickerIdx < tickers.length) {
-        var menu = spreadChart._fullLayout.updatemenus[0];
-        // Find button index for this ticker
-        var btnIdx = tickerIdx + 1; // +1 because All is at index 0
-        if (btnIdx < menu.buttons.length) {
-          menu.buttons[btnIdx].click(menu, btnIdx);
+// Sync x-axis on zoom/pan across all 4
+var charts = ['c1','c2','c3','c4'];
+charts.forEach(function(src) {
+  document.getElementById(src).on('plotly_relayout', function(ev) {
+    if (ev['xaxis.range[0]'] || ev['xaxis.range[1]'] || ev['xaxis.autorange']) {
+      var r0 = ev['xaxis.range[0]'] || null;
+      var r1 = ev['xaxis.range[1]'] || null;
+      charts.forEach(function(dst) {
+        if (dst !== src) {
+          Plotly.relayout(document.getElementById(dst), {'xaxis.range': [r0, r1]});
         }
-      }
+      });
     }
   });
+});
 </script>
 
-<div class="footer">
-  <p>Data: Aswath Damodaran (NYU Stern) · Yahoo Finance · Updated daily via OpenClaw</p>
-  <p>Not investment advice. Expected returns are estimates based on publicly available data.</p>
-</div>
+<div class="fn">
+  Data: Aswath Damodaran (NYU Stern) · Yahoo Finance · Updated daily via OpenClaw<br>
+  Not investment advice. SPY shown as market benchmark.
 </div>
 </body>
 </html>
